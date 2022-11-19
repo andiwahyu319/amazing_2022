@@ -96,7 +96,19 @@ if (!isset($_SESSION["user"])) {
 						$sql = "INSERT INTO jawaban (user_id, soal_id, jawab, cek) VALUES ('$user_id', '$soal', '$jawab', $cek)";
 						$result = mysqli_query($conn, $sql);
 						if ($jawab == $benar) {
-							echo "<div class='alert alert-success'>Jawabanmu Benar</div>";
+							echo "<div class='alert alert-success'>";
+							echo "<b>Jawabanmu Benar</b>";
+							echo "<hr>";
+							$alesan = mysqli_query($conn, "SELECT * FROM tts_soal WHERE soal_id=$soal");
+							if ($alesan->num_rows > 0) {
+								$alesan = mysqli_fetch_assoc($alesan);
+								echo $alesan["soal"];
+								echo "<hr>";
+								echo strtoupper($jawab);
+								echo "<hr>";
+								echo $alesan["alasan"];
+							}
+							echo "</div>";
 							$orang = mysqli_query($conn, "SELECT * FROM user WHERE user_id=$user_id");
 							if ($orang->num_rows > 0) {
 								$user = mysqli_fetch_assoc($orang);
@@ -108,7 +120,13 @@ if (!isset($_SESSION["user"])) {
 								mysqli_query($conn, "UPDATE user SET score=$score, liga='$liga' WHERE user_id=$user_id");
 							}
 						} else {
-							echo "<div class='alert alert-danger'>Jawabanmu Salah</div>";
+							echo "<div class='alert alert-danger'>";
+							echo "Jawabanmu Salah";
+							echo "</hr>";
+							echo " Soal id : $soal";
+							echo "</hr>";
+							echo strtoupper($jawab);
+							echo "</div>";
 						}
 					}
 				?>
